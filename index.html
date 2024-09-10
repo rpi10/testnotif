@@ -3,46 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notification Test</title>
+    <title>Notification Button</title>
     <style>
+        /* Center the button on the screen */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
         button {
-            padding: 20px;
+            padding: 15px 30px;
             font-size: 18px;
-            margin: 50px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <h1>Notification Test</h1>
-    <button id="notifyBtn">Notify Me</button>
+
+    <button onclick="notifyMe()">Click me!</button>
 
     <script>
-        // Register the service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(() => {
-                console.log('Service Worker Registered');
-            });
-        }
-
-        // Show notification on button click
-        document.getElementById('notifyBtn').addEventListener('click', function() {
-            if ('Notification' in window) {
-                Notification.requestPermission().then((result) => {
-                    if (result === 'granted') {
-                        navigator.serviceWorker.ready.then((registration) => {
-                            registration.showNotification("Vibration Sample", {
-                                body: "Buzz! Buzz!",
-                                icon: "icon.png",  // Replace with your icon path
-                                vibrate: [200, 100, 200, 100, 200, 100, 200],
-                                tag: "vibration-sample"
-                            });
-                        });
+        // Function to show a notification
+        function notifyMe() {
+            // Check if the browser supports notifications
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notifications.");
+            }
+            // Check if notification permissions have already been granted
+            else if (Notification.permission === "granted") {
+                // Show a notification
+                new Notification("Hey there!");
+            }
+            // If not, ask for permission
+            else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                    // If permission is granted, show a notification
+                    if (permission === "granted") {
+                        new Notification("Hey there!");
                     }
                 });
-            } else {
-                alert("This browser does not support notifications.");
             }
-        });
+        }
     </script>
+
 </body>
 </html>
