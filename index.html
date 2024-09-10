@@ -38,21 +38,27 @@
         function notifyMe() {
             // Check if the browser supports notifications
             if (!("Notification" in window)) {
-                alert("HI silly banana you dont have the right browser lol");
+                alert("This browser does not support desktop notifications. Here is an alert instead: Hey there!");
             }
             // Check if notification permissions have already been granted
             else if (Notification.permission === "granted") {
                 // Show a notification
                 new Notification("Hey there!");
             }
-            // If not, ask for permission
+            // If permission is not denied, ask for permission
             else if (Notification.permission !== "denied") {
                 Notification.requestPermission().then(function (permission) {
                     // If permission is granted, show a notification
                     if (permission === "granted") {
                         new Notification("Hey there!");
+                    } else {
+                        // If permission is denied, fallback to alert
+                        alert("Notification permission denied. Hey there!");
                     }
                 });
+            } else {
+                // If permissions are denied, fallback to alert
+                alert("Notifications are blocked. Hey there!");
             }
         }
     </script>
