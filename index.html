@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Button Test</title>
+    <title>Notification Test</title>
     <style>
         button {
             padding: 20px;
@@ -13,43 +13,35 @@
     </style>
 </head>
 <body>
-    <h1>Test Button</h1>
-    <button id="testBtn">Click Me</button>
+    <h1>Notification Test</h1>
+    <button id="notifyBtn">Notify Me</button>
 
     <script>
-        const testBtn = document.getElementById('testBtn');
+        // Register the service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(() => {
+                console.log('Service Worker Registered');
+            });
+        }
 
-        // Function to request notification permission and send notification
-        function sendNotification() {
-            // Check if the browser supports notifications
-            if (!("Notification" in window)) {
-                console.log("This browser does not support notifications.");
-                return;
-            }
-
-            // Check notification permission
-            if (Notification.permission === "granted") {
-                // If permission is already granted, send a notification
-                new Notification("Hello! This is your notification.");
-            } else if (Notification.permission !== "denied") {
-                // If permission is not denied, request it
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        new Notification("Hello! You granted permission, here's your notification.");
+        // Show notification on button click
+        document.getElementById('notifyBtn').addEventListener('click', function() {
+            if ('Notification' in window) {
+                Notification.requestPermission().then((result) => {
+                    if (result === 'granted') {
+                        navigator.serviceWorker.ready.then((registration) => {
+                            registration.showNotification("Vibration Sample", {
+                                body: "Buzz! Buzz!",
+                                icon: "icon.png",  // Replace with your icon path
+                                vibrate: [200, 100, 200, 100, 200, 100, 200],
+                                tag: "vibration-sample"
+                            });
+                        });
                     }
                 });
             } else {
-                console.log("Notification permission is denied.");
+                alert("This browser does not support notifications.");
             }
-        }
-
-        // Add event listeners for both touchstart and click
-        testBtn.addEventListener('touchstart', sendNotification);
-        testBtn.addEventListener('click', sendNotification);
-
-        // Prevent 300ms delay on touch devices
-        testBtn.addEventListener('touchend', function(event) {
-            event.preventDefault();
         });
     </script>
 </body>
