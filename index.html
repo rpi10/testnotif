@@ -1,49 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notification Example</title>
-  <script>
-    // Check for Notification API support
-    function notifyUser() {
-      if (!("Notification" in window)) {
-        alert("This browser does not support desktop notification");
-        return;
-      }
+<html>
+    <button>Click me</button>
+    <script>
+        const button = document.querySelector("button")
+        button.addEventListener("click", () => {
+            Notification.requestPermission().then(perm=>{
+                if (perm ==="granted"){
+                    new Notification("Hello")
+                }
+            })
 
-      // Request permission from the user
-      if (Notification.permission === "granted") {
-        // Show notification
-        sendNotification();
-      } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(permission => {
-          if (permission === "granted") {
-            sendNotification();
-          }
-        });
-      }
-    }
-
-    // Function to send the notification
-    function sendNotification() {
-      const options = {
-        body: "You have a new message!",
-        icon: "notification-icon.png", // Optional: Add your own icon
-        vibrate: [200, 100, 200], // Vibration pattern (works on mobile)
-        tag: "message-notification", // Ensure unique notifications
-      };
-
-      const notification = new Notification("Hello from the web!", options);
-
-      notification.onclick = function () {
-        window.open("https://yourwebsite.com"); // On click, redirect to your website
-      };
-    }
-  </script>
-</head>
-<body>
-  <h1>Notification Demo</h1>
-  <button onclick="notifyUser()">Show Notification</button>
-</body>
+        })
+    </script>
 </html>
