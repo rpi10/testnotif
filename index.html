@@ -1,67 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notification Button</title>
-    <style>
-        /* Center the button on the screen */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notification Example</title>
+  <script>
+    // Check for Notification API support
+    function notifyUser() {
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+        return;
+      }
 
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+      // Request permission from the user
+      if (Notification.permission === "granted") {
+        // Show notification
+        sendNotification();
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            sendNotification();
+          }
+        });
+      }
+    }
 
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    // Function to send the notification
+    function sendNotification() {
+      const options = {
+        body: "You have a new message!",
+        icon: "notification-icon.png", // Optional: Add your own icon
+        vibrate: [200, 100, 200], // Vibration pattern (works on mobile)
+        tag: "message-notification", // Ensure unique notifications
+      };
+
+      const notification = new Notification("Hello from the web!", options);
+
+      notification.onclick = function () {
+        window.open("https://yourwebsite.com"); // On click, redirect to your website
+      };
+    }
+  </script>
 </head>
 <body>
-
-    <button onclick="notifyMe()">Click me!</button>
-
-    <script>
-        // Function to show a notification
-        function notifyMe() {
-            // Check if the browser supports notifications
-            if (!("Notification" in window)) {
-                alert("This browser does not support desktop notifications. Here is an alert instead: Hey there!");
-            }
-            // Check if notification permissions have already been granted
-            else if (Notification.permission === "granted") {
-                // Show a notification
-                new Notification("Hey there!");
-            }
-            // If permission is not denied, ask for permission
-            else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then(function (permission) {
-                    // If permission is granted, show a notification
-                    if (permission === "granted") {
-                        new Notification("Hey there!");
-                    } else {
-                        // If permission is denied, fallback to alert
-                        alert("Notification permission denied. Hey there!");
-                    }
-                });
-            } else {
-                // If permissions are denied, fallback to alert
-                alert("Notifications are blocked. Hey there!");
-            }
-        }
-    </script>
-
+  <h1>Notification Demo</h1>
+  <button onclick="notifyUser()">Show Notification</button>
 </body>
 </html>
