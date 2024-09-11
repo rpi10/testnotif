@@ -4,9 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Push Notification Example</title>
+    <style>
+        /* Center the button on the page */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Style the button */
+        #notifyBtn {
+            padding: 20px 40px;
+            font-size: 24px;
+            background-color: #28a745; /* Green color */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Add hover effect */
+        #notifyBtn:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+    </style>
 </head>
 <body>
-    <button id="notifyBtn">Send Notification</button>
+
+    <button id="notifyBtn">Click me</button>
 
     <script>
         // Register the Service Worker
