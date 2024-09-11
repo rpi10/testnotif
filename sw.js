@@ -1,1 +1,8 @@
-importScripts("https://cdn.pushalert.co/sw-74199_2.js");
+self.addEventListener('push', function(event) {
+    const options = {
+        body: event.data ? event.data.text() : 'Hi from push notification!',
+    };
+    event.waitUntil(
+        self.registration.showNotification('Push Notification', options)
+    );
+});
