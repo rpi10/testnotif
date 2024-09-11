@@ -1,19 +1,40 @@
-<html>
-   <body>
-    <button>Click me</button>
-   </body> 
-    <script>
-        const button = document.querySelector("button")
-        button.addEventListener("click", () => {
-            Notification.requestPermission().then(perm=>{
-                if (perm ==="granted"){
-                    new Notification("Hello")
-                }
-            })
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push Notification Example</title>
+</head>
+<body>
+    <button id="notifyBtn">Send Notification</button>
 
-        })
+    <script>
+        // Register the Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch(function(error) {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+
+        // Request Notification Permission
+        const button = document.getElementById("notifyBtn");
+        button.addEventListener("click", () => {
+            Notification.requestPermission().then((perm) => {
+                if (perm === "granted") {
+                    // Send a Push Notification
+                    navigator.serviceWorker.ready.then(function(registration) {
+                        registration.showNotification("Hi!", {
+                            body: "This is a push notification",
+                            icon: "/path-to-your-icon.png" // optional
+                        });
+                    });
+                } else {
+                    console.log("Notification permission denied");
+                }
+            });
+        });
     </script>
-    <style>
- 
-    </style>
+</body>
 </html>
